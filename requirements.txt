@@ -1,1 +1,4 @@
 django
+django-debug-toolbar
+django-crispy-forms
+crispy-bootstrap4
