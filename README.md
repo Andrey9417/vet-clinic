@@ -13,6 +13,10 @@ A Django web application for managing a veterinary clinic: veterinarians, their 
 - Assign / unassign yourself to a pet with one click
 - Create new animal types
 
+## DB Schema:
+
+![img.png](img.png)
+
 ## Tech Stack
 
 - Python 3.14
