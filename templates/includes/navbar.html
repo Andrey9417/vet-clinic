@@ -1,0 +1,55 @@
+{% with current=request.resolver_match.url_name %}
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="{% url "vet_clinic:index" %}">🐾 Vet Clinic</a>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "vet_clinic:index" %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url "vet_clinic:vet-list" %}">Our team</a>
+          </li>
+
+          {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "vet_clinic:pet-list" %}">Patients</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "vet_clinic:my-patients" %}">My patients</a>
+            </li>
+          {% endif %}
+        </ul>
+
+        <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                 aria-expanded="false">
+                {{ user.get_full_name }}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a class="dropdown-item" href="{% url "vet_clinic:vet-detail" pk=user.pk %}">My profile</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li>
+                  <form method="post" action="{% url "logout" %}">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item">Log out</button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              <a class="btn btn-outline-light btn-sm mt-1" href="{% url "login" %}">Staff login</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+{% endwith %}

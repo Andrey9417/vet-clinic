@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}{{ vet.get_full_name }}{% endblock %}
+
+{% block content %}
+  <div class="card shadow-sm mb-4">
+    <div class="card-body d-flex align-items-center p-4">
+      <div
+          class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0 me-4"
+          style="width: 80px; height: 80px; font-size: 1.75rem;">
+        {{ vet.first_name|first }}{{ vet.last_name|first }}
+      </div>
+      <div class="flex-grow-1">
+        <div class="d-flex align-items-center gap-3 mb-1">
+          <h1 class="h3 mb-0">{{ vet.get_full_name }}</h1>
+          {% if user == vet %}
+            <a href="{% url 'vet_clinic:update-profile' %}" class="btn btn-outline-primary btn-sm">Edit personal info</a>
+          {% endif %}
+        </div>
+        <p class="text-primary mb-1">{{ vet.specialization }}</p>
+        <p class="text-muted mb-0">
+          {{ vet.years_of_experience }} year{{ vet.years_of_experience|pluralize }} of experience
+          {% if vet.email %} · <a href="mailto:{{ vet.email }}">{{ vet.email }}</a>{% endif %}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="h4 mb-3">Patients ({{ vet.pets.all|length }})</h2>
+
+  {% if vet.pets.all %}
+    <table class="table table-striped align-middle">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Age</th>
+        <th>Owner</th>
+        <th>Phone</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for pet in vet.pets.all %}
+        <tr>
+          <td>
+            <a href="{% url "vet_clinic:pet-detail" pet.pk %}">{{ pet.name }}</a>
+          </td>
+          <td>{{ pet.animal_type.name }}</td>
+          <td>{{ pet.get_age }}</td>
+          <td>{{ pet.owner_name }}</td>
+          <td>{{ pet.owner_phone }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="text-muted">This veterinarian has no patients yet.</p>
+  {% endif %}
+{% endblock %}
