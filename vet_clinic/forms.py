@@ -9,15 +9,15 @@ from vet_clinic.models import AnimalType, Pet
 
 User = get_user_model()
 
+
 class PetSearchForm(forms.Form):
     name = forms.CharField(
         max_length=50,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": "Search by name..."
-        }),
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Search by name..."}
+        ),
     )
     animal_type = forms.ModelChoiceField(
         queryset=AnimalType.objects.all(),
@@ -43,7 +43,15 @@ class AnimalTypeCreateForm(forms.ModelForm):
 class PetCreateForm(forms.ModelForm):
     class Meta:
         model = Pet
-        fields = ["animal_type", "name", "birth_date", "owner_name", "owner_phone", "description", "veterinarians"]
+        fields = [
+            "animal_type",
+            "name",
+            "birth_date",
+            "owner_name",
+            "owner_phone",
+            "description",
+            "veterinarians",
+        ]
         widgets = {
             "birth_date": forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
             "description": forms.Textarea(attrs={"rows": 3}),
@@ -55,6 +63,7 @@ class PetCreateForm(forms.ModelForm):
         if birth_date > date.today():
             raise forms.ValidationError("Birth date cannot be in the future.")
         return birth_date
+
 
 class UserRegisterForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -72,4 +81,3 @@ class UserRegisterForm(UserCreationForm):
         if User.objects.filter(email__icontains=email).exists():
             raise forms.ValidationError("This email already exists.")
         return email
-

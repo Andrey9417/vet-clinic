@@ -14,7 +14,8 @@
         <div class="d-flex align-items-center gap-3 mb-1">
           <h1 class="h3 mb-0">{{ vet.get_full_name }}</h1>
           {% if user == vet %}
-            <a href="{% url 'vet_clinic:update-profile' %}" class="btn btn-outline-primary btn-sm">Edit personal info</a>
+            <a href="{% url "vet_clinic:update-profile" %}" class="btn btn-outline-primary btn-sm">Edit personal
+              info</a>
           {% endif %}
         </div>
         <p class="text-primary mb-1">{{ vet.specialization }}</p>

@@ -39,7 +39,7 @@ def activate_user(uidb64, token) -> bool:
     try:
         pk = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=pk)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+    except TypeError, ValueError, OverflowError, User.DoesNotExist:
         user = None
 
     if user and default_token_generator.check_token(user, token):

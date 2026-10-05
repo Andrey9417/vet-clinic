@@ -7,7 +7,12 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from vet_clinic.forms import PetSearchForm, AnimalTypeCreateForm, PetCreateForm, UserRegisterForm
+from vet_clinic.forms import (
+    PetSearchForm,
+    AnimalTypeCreateForm,
+    PetCreateForm,
+    UserRegisterForm,
+)
 from vet_clinic.models import Pet, AnimalType
 from vet_clinic.services.user_activation_service import activate_user, register_user
 
@@ -17,7 +22,9 @@ Veterinarian = get_user_model()
 def index(request):
     context = {
         "animal_types": AnimalType.objects.order_by("name"),
-        "vets": Veterinarian.objects.filter(is_active=True).order_by("-years_of_experience")[:3],
+        "vets": Veterinarian.objects.filter(is_active=True).order_by(
+            "-years_of_experience"
+        )[:3],
     }
     return render(request, "vet_clinic/index.html", context)
 
@@ -26,9 +33,9 @@ class VeterinarianListView(generic.ListView):
     model = Veterinarian
     context_object_name = "vets"
     template_name = "vet_clinic/veterinarian_list.html"
-    queryset = (Veterinarian.objects
-                .filter(is_active=True, is_superuser=False)
-                .order_by("last_name", "first_name"))
+    queryset = Veterinarian.objects.filter(is_active=True, is_superuser=False).order_by(
+        "last_name", "first_name"
+    )
     paginate_by = 3
 
 
@@ -36,7 +43,9 @@ class VeterinarianDetailView(LoginRequiredMixin, generic.DetailView):
     model = Veterinarian
     context_object_name = "vet"
     template_name = "vet_clinic/veterinarian_detail.html"
-    queryset = Veterinarian.objects.filter(is_active=True).prefetch_related("pets__animal_type")
+    queryset = Veterinarian.objects.filter(is_active=True).prefetch_related(
+        "pets__animal_type"
+    )
 
 
 class PetListView(LoginRequiredMixin, generic.ListView):
@@ -77,7 +86,9 @@ class MyPetListView(PetListView):
 
 class PetDetailView(LoginRequiredMixin, generic.DetailView):
     model = Pet
-    queryset = Pet.objects.select_related("animal_type").prefetch_related("veterinarians")
+    queryset = Pet.objects.select_related("animal_type").prefetch_related(
+        "veterinarians"
+    )
 
 
 class PetCreateView(LoginRequiredMixin, SuccessMessageMixin, generic.CreateView):
@@ -126,7 +137,13 @@ class ToggleAssignPet(LoginRequiredMixin, generic.View):
 
 class UpdateProfileView(LoginRequiredMixin, generic.UpdateView):
     model = Veterinarian
-    fields = ["first_name", "last_name", "email", "specialization", "years_of_experience"]
+    fields = [
+        "first_name",
+        "last_name",
+        "email",
+        "specialization",
+        "years_of_experience",
+    ]
     template_name = "vet_clinic/profile_update.html"
 
     def get_success_url(self):
@@ -144,7 +161,10 @@ class UserRegisterView(generic.FormView):
     def form_valid(self, form):
         user = form.save(commit=False)
         register_user(user)
-        messages.success(self.request, "User created successfully, check your email to activate your account.")
+        messages.success(
+            self.request,
+            "User created successfully, check your email to activate your account.",
+        )
         return super().form_valid(form)
 
 

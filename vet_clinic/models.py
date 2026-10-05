@@ -15,7 +15,9 @@ class AnimalType(models.Model):
 
 class Veterinarian(AbstractUser):
     years_of_experience = models.PositiveIntegerField(default=0)
-    specialization = models.CharField(max_length=255, blank=True, default="General practice")
+    specialization = models.CharField(
+        max_length=255, blank=True, default="General practice"
+    )
 
     def __str__(self):
         return f"{self.username} ({self.first_name} {self.last_name})"
@@ -30,8 +32,12 @@ class Pet(models.Model):
     description = models.TextField(blank=True, null=True)
     owner_name = models.CharField(max_length=255)
     owner_phone = models.CharField(max_length=20)
-    animal_type = models.ForeignKey(AnimalType, on_delete=models.PROTECT, related_name="pets")
-    veterinarians = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="pets", blank=True)
+    animal_type = models.ForeignKey(
+        AnimalType, on_delete=models.PROTECT, related_name="pets"
+    )
+    veterinarians = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="pets", blank=True
+    )
 
     def __str__(self):
         return f"{self.name} ({self.animal_type.name}, {self.get_age()})"
@@ -40,14 +46,20 @@ class Pet(models.Model):
         today = date.today()
         born = self.birth_date
 
-        years = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        years = (
+            today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        )
         if years >= 1:
             return f"{years} year{'s' if years != 1 else ''}"
 
-        months = (today.year - born.year) * 12 + today.month - born.month - (today.day < born.day)
+        months = (
+            (today.year - born.year) * 12
+            + today.month
+            - born.month
+            - (today.day < born.day)
+        )
         if months >= 1:
             return f"{months} month{'s' if months != 1 else ''}"
 
         days = (today - born).days
         return f"{days} day{'s' if days != 1 else ''}"
-

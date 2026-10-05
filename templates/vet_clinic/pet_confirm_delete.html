@@ -17,7 +17,7 @@
           <form method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger">Yes, delete</button>
-            <a href="{% url 'vet_clinic:pet-detail' object.pk %}" class="btn btn-link">Cancel</a>
+            <a href="{% url "vet_clinic:pet-detail" object.pk %}" class="btn btn-link">Cancel</a>
           </form>
         </div>
       </div>

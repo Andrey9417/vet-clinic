@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/6.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
+
 import os
 from pathlib import Path
 
@@ -42,8 +43,11 @@ INSTALLED_APPS = [
     "vet_clinic",
     "debug_toolbar",
     "crispy_forms",
-    "crispy_bootstrap4",
+    "crispy_bootstrap5",
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -72,8 +76,6 @@ TEMPLATES = [
         },
     },
 ]
-
-CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 WSGI_APPLICATION = "core.wsgi.application"
 

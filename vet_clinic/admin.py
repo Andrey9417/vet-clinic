@@ -20,7 +20,7 @@ class VeterinarianAdmin(UserAdmin):
                         "first_name",
                         "last_name",
                         "specialization",
-                        "years_of_experience"
+                        "years_of_experience",
                     )
                 },
             ),
