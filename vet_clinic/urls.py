@@ -1,10 +1,13 @@
 from django.urls import path
 
 from vet_clinic.views import index, VeterinarianListView, VeterinarianDetailView, PetDetailView, PetListView, \
-    ToggleAssignPet, MyPetListView, UpdateProfileView, PetCreateView, AnimalTypeCreateView, PetUpdateView, PetDeleteView
+    ToggleAssignPet, MyPetListView, UpdateProfileView, PetCreateView, AnimalTypeCreateView, PetUpdateView, \
+    PetDeleteView, UserRegisterView, ActivateUserView
 
 urlpatterns = [
     path("", index, name="index"),
+    path("register/", UserRegisterView.as_view(), name="register"),
+    path("activate/<str:uidb64>/<str:token>/", ActivateUserView.as_view(), name="activate"),
     path("veterinarians/", VeterinarianListView.as_view(), name="vet-list"),
     path("veterinarians/<int:pk>/", VeterinarianDetailView.as_view(), name="vet-detail"),
     path("pets/", PetListView.as_view(), name="pet-list"),

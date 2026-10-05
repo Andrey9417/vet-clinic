@@ -1,12 +1,15 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from vet_clinic.forms import PetSearchForm, AnimalTypeCreateForm, PetCreateForm
+from vet_clinic.forms import PetSearchForm, AnimalTypeCreateForm, PetCreateForm, UserRegisterForm
 from vet_clinic.models import Pet, AnimalType
+from vet_clinic.services.user_activation_service import activate_user, register_user
 
 Veterinarian = get_user_model()
 
@@ -109,7 +112,6 @@ class AnimalTypeCreateView(LoginRequiredMixin, SuccessMessageMixin, generic.Crea
     template_name = "vet_clinic/animaltype_form.html"
 
 
-
 class ToggleAssignPet(LoginRequiredMixin, generic.View):
     def post(self, request, *args, **kwargs):
         pet = Pet.objects.get(pk=kwargs["pk"])
@@ -133,3 +135,23 @@ class UpdateProfileView(LoginRequiredMixin, generic.UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
+
+class UserRegisterView(generic.FormView):
+    form_class = UserRegisterForm
+    template_name = "registration/register.html"
+    success_url = reverse_lazy("login")
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        register_user(user)
+        messages.success(self.request, "User created successfully, check your email to activate your account.")
+        return super().form_valid(form)
+
+
+class ActivateUserView(generic.View):
+    def get(self, request: HttpRequest, uidb64: str, token: str):
+        if activate_user(uidb64, token):
+            messages.success(request, "User successfully activated")
+        else:
+            messages.error(request, "Wrong or invalid token")
+        return redirect("login")

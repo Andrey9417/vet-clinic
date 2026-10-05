@@ -1,8 +1,13 @@
 from django import forms
 from datetime import date
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
+
+
 from vet_clinic.models import AnimalType, Pet
 
+User = get_user_model()
 
 class PetSearchForm(forms.Form):
     name = forms.CharField(
@@ -50,3 +55,21 @@ class PetCreateForm(forms.ModelForm):
         if birth_date > date.today():
             raise forms.ValidationError("Birth date cannot be in the future.")
         return birth_date
+
+class UserRegisterForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = UserCreationForm.Meta.fields + (
+            "email",
+            "first_name",
+            "last_name",
+            "specialization",
+            "years_of_experience",
+        )
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+        if User.objects.filter(email__icontains=email).exists():
+            raise forms.ValidationError("This email already exists.")
+        return email
+
