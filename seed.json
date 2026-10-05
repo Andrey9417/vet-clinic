@@ -144,6 +144,25 @@
     }
   },
   {
+    "model": "vet_clinic.veterinarian",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$seedsalt06$3Ca8g5LHB+8Fspt00PklvCF2nqEgeFMRj6zJ0RdJrKw=",
+      "is_superuser": false,
+      "username": "test_user",
+      "first_name": "Test",
+      "last_name": "User",
+      "email": "test_user@vetclinic.example",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2024-01-15T09:00:00Z",
+      "groups": [],
+      "user_permissions": [],
+      "years_of_experience": 3,
+      "specialization": "General practice"
+    }
+  },
+  {
     "model": "vet_clinic.pet",
     "pk": 1,
     "fields": {

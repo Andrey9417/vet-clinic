@@ -14,6 +14,7 @@ class AnimalType(models.Model):
 
 
 class Veterinarian(AbstractUser):
+    email = models.EmailField(unique=True)
     years_of_experience = models.PositiveIntegerField(default=0)
     specialization = models.CharField(
         max_length=255, blank=True, default="General practice"
