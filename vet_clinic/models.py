@@ -1,8 +1,10 @@
 from datetime import date
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
 
 class AnimalType(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -12,11 +14,15 @@ class AnimalType(models.Model):
 
 
 class Veterinarian(AbstractUser):
-    years_of_experience = models.IntegerField()
-    specialization = models.CharField(max_length=255)
+    years_of_experience = models.PositiveIntegerField(default=0)
+    specialization = models.CharField(max_length=255, blank=True, default="General practice")
 
     def __str__(self):
         return f"{self.username} ({self.first_name} {self.last_name})"
+
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class Pet(models.Model):
     name = models.CharField(max_length=255)
@@ -24,8 +30,8 @@ class Pet(models.Model):
     description = models.TextField(blank=True, null=True)
     owner_name = models.CharField(max_length=255)
     owner_phone = models.CharField(max_length=20)
-    animal_type = models.ForeignKey(AnimalType, on_delete=models.CASCADE, related_name="pets")
-    veterinarians = models.ManyToManyField(get_user_model(), related_name="pets")
+    animal_type = models.ForeignKey(AnimalType, on_delete=models.PROTECT, related_name="pets")
+    veterinarians = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="pets", blank=True)
 
     def __str__(self):
         return f"{self.name} ({self.animal_type.name}, {self.get_age()})"
@@ -44,3 +50,4 @@ class Pet(models.Model):
 
         days = (today - born).days
         return f"{days} day{'s' if days != 1 else ''}"
+
