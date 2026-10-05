@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 from pathlib import Path
 
-from vet_clinic.models import Veterinarian
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -125,7 +123,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
-STATICFILES_DIRS = (BASE_DIR / "static")
+STATICFILES_DIRS = (BASE_DIR / "static",)
 
 
 # Email
@@ -137,12 +135,13 @@ MAILERS = {
     },
 }
 
-AUTH_USER_MODEL = Veterinarian
+AUTH_USER_MODEL = "vet_clinic.Veterinarian"
 
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-LOGIN_REDIRECT_URL = "/"
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_REDIRECT_URL = "vet_clinic:index"
+LOGOUT_REDIRECT_URL = "vet_clinic:index"
