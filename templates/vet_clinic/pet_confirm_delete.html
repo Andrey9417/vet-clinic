@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Delete {{ object.name }}{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-danger">
+        <div class="card-body p-4">
+          <h1 class="h4 mb-3">Delete patient?</h1>
+          <p>
+            You are about to permanently delete
+            <strong>{{ object.name }}</strong> ({{ object.animal_type.name }}, owner: {{ object.owner_name }}).
+            This cannot be undone.
+          </p>
+
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Yes, delete</button>
+            <a href="{% url "vet_clinic:pet-detail" object.pk %}" class="btn btn-link">Cancel</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

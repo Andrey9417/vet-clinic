@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}{{ pet.name }}{% endblock %}
+
+{% block content %}
+
+  <div class="d-flex flex-wrap justify-content-between align-items-start mb-4">
+    <div>
+      <h1 class="mb-1">{{ pet.name }}</h1>
+      <span class="badge bg-primary">{{ pet.animal_type.name }}</span>
+      <span class="text-muted ms-2">{{ pet.get_age }}</span>
+    </div>
+    <div class="mt-2 mt-md-0">
+      <a href="{% url "vet_clinic:pet-update" pk=pet.pk %}" class="btn btn-outline-primary">Edit</a>
+      <a href="{% url "vet_clinic:pet-delete" pk=pet.pk %}" class="btn btn-outline-danger">Delete</a>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header">About</div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Type</dt>
+            <dd class="col-sm-8">{{ pet.animal_type.name }}</dd>
+
+            <dt class="col-sm-4">Date of birth</dt>
+            <dd class="col-sm-8">{{ pet.birth_date }} ({{ pet.get_age }})</dd>
+
+            <dt class="col-sm-4">Description</dt>
+            <dd class="col-sm-8 mb-0">
+              {% if pet.description %}{{ pet.description|linebreaksbr }}{% else %}
+                <span class="text-muted">No description.</span>{% endif %}
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="card shadow-sm">
+        <div class="card-header">Owner</div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-sm-4">Name</dt>
+            <dd class="col-sm-8">{{ pet.owner_name }}</dd>
+            <dt class="col-sm-4">Phone</dt>
+            <dd class="col-sm-8 mb-0">{{ pet.owner_phone }}</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-header">Treating veterinarians</div>
+        <ul class="list-group list-group-flush">
+          {% for vet in pet.veterinarians.all %}
+            <li class="list-group-item">
+              <a href="{% url "vet_clinic:vet-detail" vet.pk %}"
+                 class="text-decoration-none">{{ vet.get_full_name }}</a>
+              <div class="small text-muted">{{ vet.specialization }}</div>
+            </li>
+          {% empty %}
+            <li class="list-group-item text-muted">No veterinarian assigned yet.</li>
+          {% endfor %}
+        </ul>
+
+        <div class="card-footer">
+          <form method="post" action="{% url "vet_clinic:toggle-assign-pet" pk=pet.pk %}">
+            {% csrf_token %}
+            {% if user in pet.veterinarians.all %}
+              <button type="submit" class="btn btn-outline-secondary w-100">Release this patient</button>
+            {% else %}
+              <button type="submit" class="btn btn-primary w-100">Take this patient</button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
