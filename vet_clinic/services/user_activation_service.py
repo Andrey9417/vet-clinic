@@ -1,3 +1,5 @@
+import os
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -30,8 +32,9 @@ def register_user(user) -> User:
     with transaction.atomic():
         user.is_active = False
         user.save()
-        activation_link = _get_activation_link(user)
-        send_activation_email(user, activation_link)
+        if not os.environ.get("RENDER_EXTERNAL_HOSTNAME"):
+            activation_link = _get_activation_link(user)
+            send_activation_email(user, activation_link)
     return user
 
 

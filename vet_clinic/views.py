@@ -163,7 +163,7 @@ class UserRegisterView(generic.FormView):
         register_user(user)
         messages.success(
             self.request,
-            "User created successfully, check your email to activate your account.",
+            "User created successfully",
         )
         return super().form_valid(form)
 
