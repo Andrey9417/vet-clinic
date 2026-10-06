@@ -30,11 +30,15 @@ def _get_activation_link(user):
 
 def register_user(user) -> User:
     with transaction.atomic():
+        # email does not work for prod, temporary change
+        if ".prod" in os.getenv("DJANGO_SETTINGS_MODULE"):
+            user.is_active = True
+            user.save()
+            return user
         user.is_active = False
         user.save()
-        if not os.environ.get("RENDER_EXTERNAL_HOSTNAME"):
-            activation_link = _get_activation_link(user)
-            send_activation_email(user, activation_link)
+        activation_link = _get_activation_link(user)
+        send_activation_email(user, activation_link)
     return user
 
 
