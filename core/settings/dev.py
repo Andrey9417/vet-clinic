@@ -1,10 +1,9 @@
 from .base import *  # noqa
 
 
-
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 # Database
@@ -20,3 +19,5 @@ DATABASES = {
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+SITE_URL = "http://127.0.0.1:8000"

@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
@@ -14,6 +13,3 @@ def send_activation_email(user, activation_link):
     )
     message.content_subtype = "html"
     message.send()
-
-    if settings.DEBUG:
-        print(f"\nACTIVATION LINK: {activation_link}\n")

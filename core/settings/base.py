@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 # Application definition
@@ -76,7 +76,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "core.wsgi.application"
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
 
@@ -121,7 +120,14 @@ STATICFILES_DIRS = (BASE_DIR / "static",)
 
 MAILERS = {
     "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
+        "BACKEND": "django.core.mail.backends.smtp.EmailBackend",
+        "OPTIONS": {
+            "host": "smtp.gmail.com",
+            "use_tls": True,
+            "username": os.environ.get("GMAIL_HOST_USER"),
+            "password": os.environ.get("GMAIL_HOST_PASSWORD"),
+            "port": 587,
+        },
     },
 }
 
@@ -131,8 +137,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = "vet_clinic:index"
 LOGOUT_REDIRECT_URL = "vet_clinic:index"
-
-SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
 
 MESSAGE_TAGS = {constants.ERROR: "danger"}
 
