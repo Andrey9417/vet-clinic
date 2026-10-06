@@ -16,19 +16,14 @@ from pathlib import Path
 from django.contrib.messages import constants
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-4at7&ukysw^trgf1(^qhy@ppqniynjx1kp$*g-m8r^n&s-e666"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 # Application definition
@@ -51,6 +46,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -79,16 +75,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/6.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
 
 # Password validation
@@ -141,10 +127,6 @@ MAILERS = {
 
 AUTH_USER_MODEL = "vet_clinic.Veterinarian"
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_REDIRECT_URL = "vet_clinic:index"
@@ -153,3 +135,5 @@ LOGOUT_REDIRECT_URL = "vet_clinic:index"
 SITE_URL = os.environ.get("SITE_URL", "http://127.0.0.1:8000")
 
 MESSAGE_TAGS = {constants.ERROR: "danger"}
+
+STATIC_ROOT = "staticfiles/"
