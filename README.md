@@ -2,6 +2,9 @@
 
 A Django web application for managing a veterinary clinic: veterinarians, their patients (pets), and animal types.
 
+## Prod
+https://vet-clinic-h52b.onrender.com/
+
 ## Features
 
 - User registration with email activation
