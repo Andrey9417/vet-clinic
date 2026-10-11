@@ -35,7 +35,7 @@ class AnimalTypeCreateForm(forms.ModelForm):
 
     def clean_name(self):
         name = self.cleaned_data["name"].strip().capitalize()
-        if AnimalType.objects.filter(name__icontains=name).exists():
+        if AnimalType.objects.filter(name=name).exists():
             raise forms.ValidationError("This animal type already exists.")
         return name
 
@@ -78,6 +78,6 @@ class UserRegisterForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
-        if User.objects.filter(email__icontains=email).exists():
+        if User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email already exists.")
         return email

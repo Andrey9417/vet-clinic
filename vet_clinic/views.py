@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpRequest
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import generic
 
@@ -50,7 +50,7 @@ class VeterinarianDetailView(LoginRequiredMixin, generic.DetailView):
 
 class PetListView(LoginRequiredMixin, generic.ListView):
     model = Pet
-    paginate_by = 13
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -104,7 +104,7 @@ class PetUpdateView(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView)
     model = Pet
     form_class = PetCreateForm
     template_name = "vet_clinic/pet_form.html"
-    success_message = "Pet created successfully."
+    success_message = "Pet updated successfully."
 
     def get_success_url(self):
         return reverse("vet_clinic:pet-detail", args=[self.object.pk])
@@ -125,7 +125,7 @@ class AnimalTypeCreateView(LoginRequiredMixin, SuccessMessageMixin, generic.Crea
 
 class ToggleAssignPet(LoginRequiredMixin, generic.View):
     def post(self, request, *args, **kwargs):
-        pet = Pet.objects.get(pk=kwargs["pk"])
+        pet = get_object_or_404(Pet, pk=kwargs["pk"])
         vet = request.user
 
         if vet in pet.veterinarians.all():
