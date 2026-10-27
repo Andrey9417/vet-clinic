@@ -19,14 +19,16 @@ from vet_clinic.services.user_activation_service import activate_user, register_
 Veterinarian = get_user_model()
 
 
-def index(request):
-    context = {
-        "animal_types": AnimalType.objects.order_by("name"),
-        "vets": Veterinarian.objects.filter(is_active=True).order_by(
+class IndexView(generic.TemplateView):
+    template_name = "vet_clinic/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["animal_types"] = AnimalType.objects.order_by("name")
+        context["vets"] = Veterinarian.objects.filter(is_active=True).order_by(
             "-years_of_experience"
-        )[:3],
-    }
-    return render(request, "vet_clinic/index.html", context)
+        )[:3]
+        return context
 
 
 class VeterinarianListView(generic.ListView):

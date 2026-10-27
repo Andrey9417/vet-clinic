@@ -1,7 +1,6 @@
 from django.urls import path
 
 from vet_clinic.views import (
-    index,
     VeterinarianListView,
     VeterinarianDetailView,
     PetDetailView,
@@ -15,10 +14,11 @@ from vet_clinic.views import (
     PetDeleteView,
     UserRegisterView,
     ActivateUserView,
+    IndexView,
 )
 
 urlpatterns = [
-    path("", index, name="index"),
+    path("", IndexView.as_view(), name="index"),
     path("register/", UserRegisterView.as_view(), name="register"),
     path(
         "activate/<str:uidb64>/<str:token>/",
